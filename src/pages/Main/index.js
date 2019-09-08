@@ -3,6 +3,7 @@ import {Keyboard, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
+import PropTypes from 'prop-types';
 import {
   Container,
   Form,
@@ -18,13 +19,21 @@ import {
 } from './styles';
 
 export default class Main extends Component {
+  static navigationOptions = {
+    title: 'Home',
+  };
+
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
+  };
   state = {
     newUser: 'robstermarinho',
     users: [],
     loading: false,
   };
 
-  /*
   // Retrieve from storage
   async componentDidMount() {
     const users = await AsyncStorage.getItem('users');
@@ -43,8 +52,6 @@ export default class Main extends Component {
       AsyncStorage.setItem('users', JSON.stringify(users));
     }
   }
-  */
-
   handleAddUser = async () => {
     const {users, newUser} = this.state;
     this.setState({loading: true});
@@ -57,7 +64,6 @@ export default class Main extends Component {
       avatar: response.data.avatar_url,
     };
 
-
     this.setState({
       users: [...users, data],
       newUser: '',
@@ -67,6 +73,12 @@ export default class Main extends Component {
     // Dissmiss keyboard after press ok
     Keyboard.dismiss();
   };
+
+  handleNavigate = async user => {
+    const {navigation} = this.props;
+    navigation.navigate('User', {user});
+  };
+
   render() {
     console.tron.log(this.props);
 
@@ -99,7 +111,7 @@ export default class Main extends Component {
               <Avatar source={{uri: item.avatar}}></Avatar>
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
-              <ProfileButton onPress={() => {}}>
+              <ProfileButton onPress={() => this.handleNavigate(item)}>
                 <ProfileButtonText>Profile</ProfileButtonText>
               </ProfileButton>
             </User>
@@ -109,6 +121,3 @@ export default class Main extends Component {
     );
   }
 }
-Main.navigationOptions = {
-  title: 'Home',
-};

@@ -6,6 +6,8 @@ import {View} from 'react-native';
 
 export default class User extends Component {
   render() {
+    const {navigation} = this.props;
+    console.tron.log(navigation.getParam('user'));
     return <View />;
   }
 }
