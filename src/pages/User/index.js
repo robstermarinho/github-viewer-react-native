@@ -1,17 +1,79 @@
 import React, {Component} from 'react';
-
+import api from '../../services/api';
 import {View} from 'react-native';
-
-// import { Container } from './styles';
+import PropTypes from 'prop-types';
+import {
+  Container,
+  Header,
+  Avatar,
+  Name,
+  Bio,
+  Stars,
+  Starred,
+  OwnerAvatar,
+  Info,
+  Title,
+  Author,
+  Loading,
+} from './styles';
 
 export default class User extends Component {
+  static navigationOptions = ({navigation}) => ({
+    title: navigation.getParam('user').name,
+  });
+
+  static propTypes = {
+    navigation: PropTypes.shape({
+      getParam: PropTypes.func,
+    }).isRequired,
+  };
+  state = {
+    stars: [],
+    loading: true,
+  };
+
+  async componentDidMount() {
+    const {navigation} = this.props;
+    const user = navigation.getParam('user');
+
+    const response = await api.get(`/users/${user.login}/starred`);
+
+    this.setState({
+      stars: response.data,
+      loading: false,
+    });
+  }
+
   render() {
     const {navigation} = this.props;
-    console.tron.log(navigation.getParam('user'));
-    return <View />;
+    const user = navigation.getParam('user');
+    const {stars, loading} = this.state;
+    return (
+      <Container>
+        <Header>
+          <Avatar source={{uri: user.avatar}}></Avatar>
+          <Name>{user.name}</Name>
+          <Bio>{user.bio}</Bio>
+        </Header>
+
+        {loading ? (
+          <Loading />
+        ) : (
+          <Stars
+            data={stars}
+            keyExtractor={star => String(star.id)}
+            renderItem={({item}) => (
+              <Starred>
+                <OwnerAvatar source={{uri: item.owner.avatar_url}} />
+                <Info>
+                  <Title>{item.name}</Title>
+                  <Author>{item.owner.login}</Author>
+                </Info>
+              </Starred>
+            )}
+          />
+        )}
+      </Container>
+    );
   }
 }
-
-User.navigationOptions = {
-  title: 'User',
-};
