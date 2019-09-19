@@ -15,6 +15,7 @@ import {
   Title,
   Author,
   Loading,
+  EndListLoading,
 } from './styles';
 
 export default class User extends Component {
@@ -31,6 +32,8 @@ export default class User extends Component {
     stars: [],
     page: 1,
     loading: true,
+    refreshing: false,
+    loading_more: false,
   };
 
   async componentDidMount() {
@@ -38,34 +41,39 @@ export default class User extends Component {
   }
 
   loadStars = async (page = 1) => {
-    const { stars } = this.state;
-    const { navigation } = this.props;
+    const {stars} = this.state;
+    const {navigation} = this.props;
     const user = navigation.getParam('user');
 
     const response = await api.get(`/users/${user.login}/starred`, {
-      params: { page },
+      params: {page},
     });
 
     this.setState({
       stars: page >= 2 ? [...stars, ...response.data] : response.data,
       page,
       loading: false,
+      refreshing: false,
+      loading_more: false,
     });
-  }
+  };
 
   loadMore = () => {
-    const { page } = this.state;
-
+    const {page, loading_more} = this.state;
+    this.setState({loading_more: true});
     const nextPage = page + 1;
 
     this.loadStars(nextPage);
   };
 
+  refreshTheList = () => {
+    this.setState({refreshing: true, stars: []}, this.loadStars);
+  };
 
   render() {
     const {navigation} = this.props;
     const user = navigation.getParam('user');
-    const {stars, loading} = this.state;
+    const {stars, loading, refreshing, loading_more} = this.state;
     return (
       <Container>
         <Header>
@@ -79,6 +87,8 @@ export default class User extends Component {
         ) : (
           <Stars
             data={stars}
+            onRefresh={this.refreshTheList}
+            refreshing={refreshing}
             onEndReachedThreshold={0.2}
             onEndReached={this.loadMore}
             keyExtractor={star => String(star.id)}
@@ -93,6 +103,7 @@ export default class User extends Component {
             )}
           />
         )}
+        {loading_more && <EndListLoading />}
       </Container>
     );
   }

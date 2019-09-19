@@ -48,6 +48,17 @@ export const Loading = styled.ActivityIndicator.attrs({
   border-radius: 4px;
 `;
 
+export const EndListLoading = styled.ActivityIndicator.attrs({
+  color: '#ff2160',
+})`
+  flex: 3;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0px;
+  background: #f5f5f5;
+  border-radius: 4px;
+`;
+
 export const Stars = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
 })`
