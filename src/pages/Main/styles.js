@@ -8,6 +8,7 @@ export const Container = styled.View`
 export const Form = styled.View`
   flex-direction: row;
   padding-bottom: 20px;
+  margin-bottom: 20px;
   border-bottom-width: 1px;
   border-color: #eee;
 `;
@@ -26,7 +27,7 @@ export const Input = styled.TextInput.attrs({
 export const SubmitButton = styled(RectButton)`
   justify-content: center;
   align-items: center;
-  background: #7159c1;
+  background: #ff9c08;
   border-radius: 4px;
   margin-left: 10px;
   padding: 0 12px;
@@ -71,7 +72,7 @@ export const ProfileButton = styled(RectButton)`
   margin-top: 10px;
   align-self: stretch;
   border-radius: 4px;
-  background: #7159c1;
+  background: #ff9c08;
   justify-content: center;
   align-items: center;
   height: 36px;

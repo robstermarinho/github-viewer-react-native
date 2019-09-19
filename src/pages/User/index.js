@@ -70,6 +70,12 @@ export default class User extends Component {
     this.setState({refreshing: true, stars: []}, this.loadStars);
   };
 
+  openWebView = rep => {
+    const {navigation} = this.props;
+
+    navigation.navigate('Web', {rep});
+  };
+
   render() {
     const {navigation} = this.props;
     const user = navigation.getParam('user');
@@ -93,7 +99,7 @@ export default class User extends Component {
             onEndReached={this.loadMore}
             keyExtractor={star => String(star.id)}
             renderItem={({item}) => (
-              <Starred>
+              <Starred onPress={() => this.openWebView(item)}>
                 <OwnerAvatar source={{uri: item.owner.avatar_url}} />
                 <Info>
                   <Title>{item.name}</Title>

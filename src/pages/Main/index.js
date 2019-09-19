@@ -29,7 +29,7 @@ export default class Main extends Component {
     }).isRequired,
   };
   state = {
-    newUser: 'robstermarinho',
+    newUser: '',
     users: [],
     loading: false,
   };
