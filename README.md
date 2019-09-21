@@ -2,11 +2,16 @@
 
 React Native app to add Github users and show starred repositories.
 
-![Template](img/githubapp.gif)
+Result:
+
+<center>
+<img src="img/githubapp.gif" height="400">
+</center>
 
 ### Run the app
 
 Run the following command in the root of the project
+
 ```
 
 react-native run-android    # For Android device
